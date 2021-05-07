@@ -6,7 +6,7 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
-
+const bodyParser = require("koa-bodyparser");
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
 const dev = process.env.NODE_ENV !== "production";
@@ -34,6 +34,7 @@ app.prepare().then(async () => {
   const server = new Koa();
   const router = new Router();
   server.keys = [Shopify.Context.API_SECRET_KEY];
+
   server.use(
     createShopifyAuth({
       async afterAuth(ctx) {
@@ -100,8 +101,10 @@ app.prepare().then(async () => {
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
 
+  server.use(bodyParser());
   server.use(router.allowedMethods());
   server.use(router.routes());
+  require("./router/productRouter")(server);
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
