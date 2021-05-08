@@ -7,7 +7,11 @@ const getProduct = () => {
 const saveProduct = (data) => {
   return axios.post("/api/product/save", data);
 };
+const removeProduct = () => {
+  return axios.post("/api/product/remove", { data: 1 });
+};
 export const httpService = {
   getProduct,
   saveProduct,
+  removeProduct,
 };

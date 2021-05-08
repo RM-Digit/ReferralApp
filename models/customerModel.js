@@ -4,10 +4,19 @@ const Schema = mongoose.Schema;
 
 const CustomerModel = new Schema(
   {
-    customerId: {
+    id: {
       type: String,
     },
-    left_number: {
+    referredBy: {
+      type: String,
+    },
+    referredTo: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    score: {
       type: Number,
     },
   },

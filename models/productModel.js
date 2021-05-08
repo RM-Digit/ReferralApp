@@ -15,9 +15,18 @@ const productModel = new Schema(
       type: String,
     },
     price: {
-      type: Number,
+      type: String,
     },
     permalink: {
+      type: String,
+    },
+    quantity: {
+      type: Number,
+    },
+    hasOnlyDefaultVariant: {
+      type: Boolean,
+    },
+    sku: {
       type: String,
     },
   },
