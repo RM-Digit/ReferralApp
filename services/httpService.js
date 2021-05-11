@@ -10,8 +10,12 @@ const saveProduct = (data) => {
 const removeProduct = () => {
   return axios.post("/api/product/remove", { data: 1 });
 };
+const checkWebhook = () => {
+  return axios.post("/webhook/check", { data: 1 });
+};
 export const httpService = {
   getProduct,
   saveProduct,
   removeProduct,
+  checkWebhook,
 };

@@ -5,10 +5,10 @@ export default function DataTableLinkExample() {
   const [sortedRows, setSortedRows] = useState(null);
 
   const initiallySortedRows = [
-    ["Mae Jemison", "Decatur, USA", "Ellen Ochoa", "John Doe", "20", "$123.12"],
+    ["Mae Jemison", "mae@gmail.com", "Ellen Ochoa", "John Doe", "20", "$123.12"],
     [
       "Ellen Ochoa",
-      "Los Angeles, USA",
+      "job@gmail.com",
       "Mae Ochoa",
       "Ellen Doe",
       "50",
@@ -17,7 +17,7 @@ export default function DataTableLinkExample() {
     ["John Doe", "Decatur, USA", "Ellen Ochoa", "John Doe", "40", "$231.23"],
     [
       "Muri Dean",
-      "Los Angeles, USA",
+      "ellen@gmail.com",
       "Mae Ochoa",
       "Ellen Doe",
       "50",
@@ -25,7 +25,7 @@ export default function DataTableLinkExample() {
     ],
     [
       "Stephen Man",
-      "Los Angeles, USA",
+      "@stephen@gmail.com",
       "Mae Ochoa",
       "Ellen Doe",
       "50",
@@ -33,7 +33,7 @@ export default function DataTableLinkExample() {
     ],
     [
       "Men Wiri",
-      "Los Angeles, USA",
+      "web@gmail.com",
       "Mae Ochoa",
       "Ellen Doe",
       "50",
@@ -63,7 +63,7 @@ export default function DataTableLinkExample() {
         ]}
         headings={[
           "Name",
-          "Location",
+          "Email",
           "Referred By",
           "Referred To",
           "Score",

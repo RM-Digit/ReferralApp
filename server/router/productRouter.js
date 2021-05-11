@@ -1,14 +1,15 @@
+import dotenv from "dotenv";
 const Router = require("koa-router");
 const product = require("../../models/productModel");
+dotenv.config();
 const router = new Router({
   prefix: "/api/product",
 });
+
 function register(app) {
   // product get router
   router.post("/get", async (ctx) => {
     const products = await product.find({});
-    console.log("product", products);
-    console.log("length", products.length);
     if (products.length) ctx.body = { success: true, product: products };
     else ctx.body = { success: false };
   });
@@ -21,7 +22,7 @@ function register(app) {
       title: reqData.title,
       imgSRC: reqData.images[0].originalSrc,
       price: reqData.variants[0].price,
-      permalink: "",
+      permalink: `https://${process.env.SHOP}/products/${reqData.handle}`,
       quantity: reqData.totalInventory,
       hasOnlyDefaultVariant: reqData.hasOnlyDefaultVariant,
       sku: reqData.variants[0].sku,

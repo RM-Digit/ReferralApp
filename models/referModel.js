@@ -2,30 +2,18 @@ const mongoose = require("../services/mongoose").mongoose;
 
 const Schema = mongoose.Schema;
 
-const CustomerModel = new Schema(
+const ReferModel = new Schema(
   {
-    id: {
+    customerId: {
       type: String,
     },
-    email: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
-    referredBy: {
+    referralLink: {
       type: String,
     },
     referredTo: {
       type: String,
     },
-    referringSite: {
-      type: String,
-    },
-    landingSite: {
-      type: String,
-    },
-    referralLink: {
+    location: {
       type: String,
     },
     score: {
@@ -42,4 +30,4 @@ const CustomerModel = new Schema(
   }
 );
 
-module.exports = mongoose.model("CustomerModel", CustomerModel);
+module.exports = mongoose.model("ReferModel", ReferModel);

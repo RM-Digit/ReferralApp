@@ -6,21 +6,11 @@ import { httpService } from "../services/httpService";
 import EmptyStateCard from "../components/emptyState";
 import Spinner from "../components/spinner";
 
-import { io } from "socket.io-client";
 const Index = () => {
   const [emptyState, setEmptyState] = useState(true);
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const orderSocket = io("/webhook/order-payment");
-  useEffect(() => {
-    orderSocket.onopen = () => {
-      console.log("WebSocket Client Connected");
-    };
-    orderSocket.onmessage = (message) => {
-      console.log(message);
-    };
-  }, []);
   const getStateChange = (state) => {
     setLoading(true);
     setEmptyState(state);
@@ -29,7 +19,7 @@ const Index = () => {
   useEffect(() => {
     httpService.getProduct().then((res) => {
       if (res.data.success) {
-        console.log("product exist", res.data.success);
+        console.log("product exist", res.data.product);
         setProduct(res.data.product[0]);
         setEmptyState(false);
       }

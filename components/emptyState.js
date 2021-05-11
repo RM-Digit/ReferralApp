@@ -10,6 +10,7 @@ const Index = ({ stateChange }) => {
   const handleSelection = (resources) => {
     setPickerOpen(false);
     const products = resources.selection;
+    console.log("products",products)
     httpService.saveProduct(products).then((res) => {
       if (res.data) stateChange(false);
     });

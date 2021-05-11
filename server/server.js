@@ -96,11 +96,7 @@ app.prepare().then(async () => {
       await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     }
   );
-  router.post("/webhook/order-payment", async (ctx) => {
-    const data = ctx.request.body;
-    console.log("webhook received", data);
-    ctx.body = data;
-  });
+
   router.get("(/_next/static/.*)", handleRequest); // Static content is clear
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
@@ -109,14 +105,7 @@ app.prepare().then(async () => {
   server.use(router.allowedMethods());
   server.use(router.routes());
   require("./router/productRouter")(server);
-
-  const io = require("socket.io")(server);
-  const registerOrderHandlers = require("./handlers/orderHandler");
-  const onConnection = (socket) => {
-    registerOrderHandlers(io, socket);
-  };
-  io.on("connection", onConnection);
-
+  require("./router/webhook")(server);
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
