@@ -30,7 +30,11 @@ const CustomerModel = new Schema(
     },
     score: {
       type: Number,
+      default: 0,
     },
+    discountCode: {
+      type:String,
+    }
   },
   { strict: false },
   {

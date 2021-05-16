@@ -22,7 +22,7 @@ function register(app) {
       title: reqData.title,
       imgSRC: reqData.images[0].originalSrc,
       price: reqData.variants[0].price,
-      permalink: `https://${process.env.SHOP}/products/${reqData.handle}`,
+      permalink: `https://skullsplitter.com/products/${reqData.handle}`,
       quantity: reqData.totalInventory,
       hasOnlyDefaultVariant: reqData.hasOnlyDefaultVariant,
       sku: reqData.variants[0].sku,

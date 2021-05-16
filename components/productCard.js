@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { httpService } from "../services/httpService";
 import { TextStyle, Card, ResourceList, Thumbnail } from "@shopify/polaris";
+import TemplateEditor from "../components/templateEditor";
+import TextFieldEditor from "../components/textField";
 import Notification from "../components/toast";
 const Index = ({ product, stateChange }) => {
   const [showToast, setShowToast] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const [showEditor, setShowEditor] = useState(false);
+  const [actionTitle, setActionTitle] = useState("Edit Email Template");
+  const [title, setTitle] = useState("Share Link and Product");
   const handleDelete = () => {
     httpService.removeProduct().then((res) => {
       if (res.data) stateChange(true);
@@ -13,32 +19,39 @@ const Index = ({ product, stateChange }) => {
   const handlePreview = () => {
     window.open(product.permalink);
   };
-
+  const handleEdit = () => {
+    // setActionTitle("View Product");
+    // setTitle("Email Template");
+    window.open("https://www.klaviyo.com/email-templates/list");
+    // setShowEditor(false);
+  };
   useEffect(() => {
-    let interval = 1000;
+    let interval = 3000;
     setInterval(() => {
       httpService.checkWebhook().then((res) => {
         if (res.data.webhook_created) {
           const link = res.data.referralLink;
           const message = `Order Payment. Referral Link ${link}`;
-          interval = 5000;
+          interval = 50000;
           setMsg(message);
           setShowToast(true);
         } else {
-          interval = 1000;
+          interval = 3000;
           setShowToast(false);
         }
       });
     }, interval);
   }, []);
   return (
-    <Card title="Referral Products" actions={[{ content: "Manage" }]}>
-      <Notification show={showToast} msg={msg} />
+    <Card
+      title={title}
+      actions={[{ content: actionTitle, onAction: handleEdit }]}
+    >
       <Card.Section>
-        <TextStyle variation="subdued">
-          {product.quantity} units available
-        </TextStyle>
+        <TextFieldEditor />
       </Card.Section>
+      <Notification show={showToast} msg={msg} />
+
       <Card.Section
         title="Items"
         actions={[

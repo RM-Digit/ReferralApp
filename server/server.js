@@ -6,6 +6,7 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
+const cors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -14,7 +15,8 @@ const app = next({
   dev,
 });
 const handle = app.getRequestHandler();
-
+// const adminURL = "https://skullsplitter.myshopify.com/admin/api/graphql.json";
+const allowed_domains = ["https://www.skullsplitterdice.com","https://skullsplitter.myshopify.com"];
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
@@ -32,6 +34,12 @@ const ACTIVE_SHOPIFY_SHOPS = {};
 
 app.prepare().then(async () => {
   const server = new Koa();
+  const koaOptions = {
+    origin: true,
+    credentials: true
+  };
+  server.use(cors());
+
   const router = new Router();
   server.keys = [Shopify.Context.API_SECRET_KEY];
 
@@ -100,12 +108,18 @@ app.prepare().then(async () => {
   router.get("(/_next/static/.*)", handleRequest); // Static content is clear
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
-
+ 
   server.use(bodyParser());
   server.use(router.allowedMethods());
   server.use(router.routes());
+
   require("./router/productRouter")(server);
   require("./router/webhook")(server);
+  require("./router/customerRouter")(server);
+  require("./router/emailRouter")(server);
+  require("./router/shareRouter")(server);
+  require("./router/discountRouter")(server);
+
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });

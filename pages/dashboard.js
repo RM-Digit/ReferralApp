@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { Page, Layout } from "@shopify/polaris";
+import { useEffect, useState, useCallback } from "react";
+import { Page, Layout, Tabs } from "@shopify/polaris";
 import CustomerTable from "../components/dataTable";
 import ProductCard from "../components/productCard";
 import { httpService } from "../services/httpService";
 import EmptyStateCard from "../components/emptyState";
+
 import Spinner from "../components/spinner";
 
 const Index = () => {
@@ -26,6 +27,7 @@ const Index = () => {
       setLoading(false);
     });
   }, [emptyState]);
+
   return (
     <Page>
       <Layout>
