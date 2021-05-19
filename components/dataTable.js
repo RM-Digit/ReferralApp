@@ -39,7 +39,6 @@ export default function DataTableLinkExample() {
     },
   ];
 
-  const handleDownload = () => {};
   useEffect(() => {
     httpService.getCustomer().then((res) => {
       if (res.data.success) {
@@ -82,8 +81,7 @@ export default function DataTableLinkExample() {
             >
               Download CSV
             </CsvDownloader>
-          ),
-          onAction: handleDownload,
+          )
         },
       ]}
     >

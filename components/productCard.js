@@ -68,7 +68,6 @@ const Index = ({ product, stateChange }) => {
           items={[
             {
               id: product.id,
-              url: product.permalink,
               name: product.title,
               sku: product.sku,
               quantity: product.quantity,

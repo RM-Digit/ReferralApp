@@ -13,20 +13,35 @@ var webhook_created = false;
 var link = "";
 const timeout = 60 * 1000;
 
+async function updateCustomer(url, referredTo) {
+  const referId = url.split("referrer=")[1];
+  customerModel.findOneAndUpdate({id:referId}, {
+    $inc: { score: 1 },referredTo:referredTo
+  });
+  const referrer = await customerModel.findOne({id:referId});
+  return referrer.name;
+}
+
+
 function register(app) {
   router.post("/order-payment", async (ctx) => {
     webhook_created = true;
+   
     const data = ctx.request.body;
+    const isReferred = data.landing_site?data.landing_site.includes("referrer="):false;
     const email = data.customer.email ? data.customer.email : data.email;
+    const name = data.customer.first_name + " " + data.customer.last_name;
     console.log("webhook received", data);
     link = await generate_referral_link(data.customer.id);
-
+    
+    const referrName = isReferred?(await updateCustomer(data.landing_site,name)):"";
+    // const referrName = await updateCustomer(data.landing_site,name);
     const customerData = {
       id: data.customer.id,
       email: email,
-      name: data.customer.first_name + " " + data.customer.last_name,
-      referringSite: data.customer.referring_site,
-      landingSite: data.customer.landing_site,
+      name: name,
+      landingSite: data.landing_site,
+      referredBy: referrName,
       referralLink: link,
     };
     const customer = new customerModel(customerData);
@@ -45,8 +60,6 @@ function register(app) {
 
   async function createMailer(email, timeout, fName) {
     const text = await klaviyoMailer.getTemplate();
-    link =
-      "https://www.skullsplitterdice.com/products/dwarven-chest-antique-brass/?referrer=3507195052092";
     const emailContents = text.data.filter((obj) => obj.id === "UfPa68");
     const splitText = "{{ ShareLink }}";
     const firstName = "{{ first_name }}";

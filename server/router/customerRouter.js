@@ -37,7 +37,7 @@ function register(app) {
     console.log("id",customerTags.id)
 
     const updated_doc = await customerModel.findOneAndUpdate(filter, {
-      $inc: { score: 1 },
+      $inc: { score: 1 }, referringSite: ctx.request.body.refer
     });
     let query_old = `mutation {
       tagsAdd(
