@@ -6,6 +6,7 @@ const CustomerModel = new Schema(
   {
     id: {
       type: String,
+      unique: true,
     },
     email: {
       type: String,
@@ -33,13 +34,13 @@ const CustomerModel = new Schema(
       default: 0,
     },
     discountCode: {
-      type:String,
+      type: String,
     },
     browserIp: {
-      type:String,
-    }
+      type: String,
+    },
   },
-  { strict: false },
+  { strict: true },
   {
     collection: "customers",
     timestamps: {

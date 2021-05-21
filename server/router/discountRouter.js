@@ -12,7 +12,10 @@ const router = new Router({
 
 function register(app) {
   router.post("/createDiscount", async (ctx) => {
-    const customerId = "gid://shopify/Customer/" + ctx.request.body.id;
+    const data = ctx.request.body;
+    console.log("landing site", data.landing_site_ref);
+    if (!data.landing_site_ref) return (ctx.body = { success: false });
+    const customerId = ctx.request.body.admin_graphql_api_id;
     const filter = { id: ctx.request.body.id };
     let today = new Date();
     let end = new Date();
@@ -71,7 +74,7 @@ function register(app) {
         usageLimit: 1,
       },
     };
-    const data = await fetch(adminURL, {
+    const createdData = await fetch(adminURL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +88,9 @@ function register(app) {
       return result.json();
     });
     const isErr =
-      data.data.discountCodeBasicCreate.userErrors.length > 0 ? true : false;
+      createdData.data.discountCodeBasicCreate.userErrors.length > 0
+        ? true
+        : false;
     console.log("lk", isErr);
     if (!isErr) {
       customerModel.findOneAndUpdate(filter, { discountCode: code });

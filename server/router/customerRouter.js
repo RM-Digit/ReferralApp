@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const Router = require("koa-router");
 const customerModel = require("../../models/customerModel");
-const adminURL =
-  "https://skullsplitter.myshopify.com/admin/api/graphql.json";
+const adminURL = "https://skullsplitter.myshopify.com/admin/api/graphql.json";
 const router = new Router({
   prefix: "/api/customer",
 });
@@ -13,8 +12,8 @@ const { SHOPIFY_ACCESS_TOKEN } = process.env;
 function register(app) {
   router.post("/getCodeById", async (ctx) => {
     const id = ctx.request.body.id;
-    const customerData = await customerModel.findOne({id:id});
-    console.log("customerData",customerData)
+    const customerData = await customerModel.findOne({ id: id });
+    console.log("customerData", customerData);
     if (customerData) ctx.body = customerData.code;
     else ctx.body = false;
   });
@@ -28,17 +27,16 @@ function register(app) {
     else ctx.body = { success: false };
   });
   router.post("/update", async (ctx) => {
+    const data = ctx.request.body;
+    console.log("customer update", data.landing_site_ref);
+    if (!data.landing_site_ref) return (ctx.body = { success: false });
     const filter = { id: ctx.request.body.id };
-   
+
     let customerTags = {
-      id: "gid://shopify/Customer/" + ctx.request.body.id,
+      id: ctx.request.body.admin_graphql_api_id,
       tags: ["referedTo", "refer"],
     };
-    console.log("id",customerTags.id)
 
-    const updated_doc = await customerModel.findOneAndUpdate(filter, {
-      $inc: { score: 1 }, referringSite: ctx.request.body.refer, 
-    });
     let query_old = `mutation {
       tagsAdd(
         id: ${customerTags.id}
@@ -61,7 +59,7 @@ function register(app) {
         }
       }
     }`;
-    const data = await fetch(adminURL, {
+    const tagUpdateData = await fetch(adminURL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,9 +72,9 @@ function register(app) {
     }).then((result) => {
       return result.json();
     });
-    console.log("customerTag", data);
-    if (updated_doc) ctx.body = { success: true, customer: data };
-    else ctx.body = { success: false,customer: data };
+    console.log("customerTag", tagUpdateData);
+    if (tagUpdateData) ctx.body = { success: true, customer: tagUpdateData };
+    else ctx.body = { success: false, customer: tagUpdateData };
   });
 
   app.use(router.routes());

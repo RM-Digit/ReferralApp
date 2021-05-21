@@ -8,7 +8,7 @@ const ShareModel = new Schema(
       type: String,
     },
   },
-  { strict: false },
+  { strict: true },
   {
     collection: "ShareLink",
     timestamps: {
