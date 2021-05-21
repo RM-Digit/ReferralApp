@@ -34,6 +34,9 @@ const CustomerModel = new Schema(
     },
     discountCode: {
       type:String,
+    },
+    browserIp: {
+      type:String,
     }
   },
   { strict: false },

@@ -22,7 +22,7 @@ const Index = ({ product, stateChange }) => {
   const handleEdit = () => {
     // setActionTitle("View Product");
     // setTitle("Email Template");
-    window.open("https://www.klaviyo.com/email-templates/list");
+    window.open("https://www.klaviyo.com/email-editor/T9cZic/edit");
     // setShowEditor(false);
   };
   useEffect(() => {

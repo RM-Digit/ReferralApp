@@ -35,7 +35,6 @@ function register(app) {
     link = await generate_referral_link(data.customer.id);
     
     const referrName = isReferred?(await updateCustomer(data.landing_site,name)):"";
-    // const referrName = await updateCustomer(data.landing_site,name);
     const customerData = {
       id: data.customer.id,
       email: email,
@@ -43,6 +42,7 @@ function register(app) {
       landingSite: data.landing_site,
       referredBy: referrName,
       referralLink: link,
+      browserIp: data.browser_ip,
     };
     const customer = new customerModel(customerData);
     customer.save();
@@ -60,7 +60,7 @@ function register(app) {
 
   async function createMailer(email, timeout, fName) {
     const text = await klaviyoMailer.getTemplate();
-    const emailContents = text.data.filter((obj) => obj.id === "UfPa68");
+    const emailContents = text.data.filter((obj) => obj.id === "T9cZic");
     const splitText = "{{ ShareLink }}";
     const firstName = "{{ first_name }}";
     var html = emailContents[0].html.replace(splitText, link);
