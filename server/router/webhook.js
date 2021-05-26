@@ -53,7 +53,7 @@ function register(app) {
       browserIp: data.browser_ip,
     };
     const findCustomer = await customerModel.findOne({ id: data.customer.id });
-    if (findCustomer.id) {
+    if (findCustomer) {
       const customer = new customerModel(customerData);
       customer.save();
     } else {
