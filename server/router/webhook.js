@@ -52,11 +52,16 @@ function register(app) {
       referralLink: link,
       browserIp: data.browser_ip,
     };
-    customerModel.findOneAndUpdate({ id: data.customer.id }, customerData, {
-      new: true,
-      upsert: true, // Make this update into an upsert
-    });
-
+    const findCustomer = await customerModel.findOne({ id: data.customer.id });
+    if (findCustomer.id) {
+      const customer = new customerModel(customerData);
+      customer.save();
+    } else {
+      customerModel.findOneAndUpdate({ id: data.customer.id }, customerData, {
+        new: true,
+        upsert: true, // Make this update into an upsert
+      });
+    }
     createMailer(email, timeout, name);
     ctx.body = true;
   });
@@ -65,14 +70,25 @@ function register(app) {
   router.post("/check", async (ctx) => {
     if (webhook_created) {
       webhook_created = false;
+
       ctx.body = { webhook_created: true, referralLink: link };
     } else ctx.body = { webhook_created: false };
   });
 
   async function createMailer(email, timeout, recepName) {
+    const text = await klaviyoMailer.getTemplate();
+    const emailContents = text.data.filter((obj) => obj.id === "T9cZic");
+    const splitText = "{{ sharelink }}";
+    link =
+      "https://www.skullsplitterdice.com/products/30-sided-polyhedral-dice-d30-32mm-solid-orange-color-1-each?ref=3507195052092";
+    var html = emailContents[0].html.replace(splitText, link);
+    const createdId = await klaviyoMailer.createTemplate(html);
     setTimeout(() => {
-      klaviyoMailer.sendEmail(email, recepName);
+      klaviyoMailer.sendEmail(email, recepName, createdId.id);
     }, timeout);
+    setTimeout(() => {
+      klaviyoMailer.deleteTemplate(createdId.id);
+    }, timeout + 60000);
   }
   // async function createMailer(email, timeout, fName) {
   //   const text = await klaviyoMailer.getTemplate();

@@ -87,6 +87,8 @@ function register(app) {
     }).then((result) => {
       return result.json();
     });
+
+    console.log("Discount Data:", createdData);
     const isErr =
       createdData.data.discountCodeBasicCreate.userErrors.length > 0
         ? true
