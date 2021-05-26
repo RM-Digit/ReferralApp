@@ -15,13 +15,13 @@ const timeout = 60 * 1000;
 
 async function updateCustomer(referId, name) {
   console.log("name", name);
-  customerModel.findOneAndUpdate(
+  await customerModel.findOneAndUpdate(
     { id: referId },
     {
       $inc: { score: 1 },
     }
   );
-  customerModel.findOneAndUpdate(
+  await customerModel.findOneAndUpdate(
     { id: referId },
     {
       referredTo: name,
@@ -66,15 +66,6 @@ function register(app) {
     ctx.body = true;
   });
 
-  // payment check
-  router.post("/check", async (ctx) => {
-    if (webhook_created) {
-      webhook_created = false;
-
-      ctx.body = { webhook_created: true, referralLink: link };
-    } else ctx.body = { webhook_created: false };
-  });
-
   async function createMailer(email, timeout, recepName) {
     const text = await klaviyoMailer.getTemplate();
     const emailContents = text.data.filter((obj) => obj.id === "T9cZic");
@@ -90,23 +81,6 @@ function register(app) {
       klaviyoMailer.deleteTemplate(createdId.id);
     }, timeout + 60000);
   }
-  // async function createMailer(email, timeout, fName) {
-  //   const text = await klaviyoMailer.getTemplate();
-  //   const emailContents = text.data.filter((obj) => obj.id === "T9cZic");
-  //   const splitText = "{{ ShareLink }}";
-  //   const firstName = "{{ first_name }}";
-  //   var html = emailContents[0].html.replace(splitText, link);
-  //   html = html.replace(firstName, fName);
-  //   setTimeout(() => {
-  //     const mailOptions = {
-  //       to: email,
-  //       from: "rissatk08@gmail.com",
-  //       subject: "SkullSplitter",
-  //       html: html,
-  //     };
-  //     nodeMailer.sendEmail(mailOptions);
-  //   }, timeout);
-  // }
 
   async function generate_referral_link(id) {
     const sharelinks = await share.find({});

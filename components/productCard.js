@@ -20,28 +20,9 @@ const Index = ({ product, stateChange }) => {
     window.open(product.permalink);
   };
   const handleEdit = () => {
-    // setActionTitle("View Product");
-    // setTitle("Email Template");
     window.open("https://www.klaviyo.com/email-editor/T9cZic/edit");
-    // setShowEditor(false);
   };
-  // useEffect(() => {
-  // let interval = 3000;
-  // setInterval(() => {
-  //   httpService.checkWebhook().then((res) => {
-  //     if (res.data.webhook_created) {
-  //       const link = res.data.referralLink;
-  //       const message = `Order Payment. Referral Link ${link}`;
-  //       interval = 50000;
-  //       setMsg(message);
-  //       setShowToast(true);
-  //     } else {
-  //       interval = 3000;
-  //       setShowToast(false);
-  //     }
-  //   });
-  // }, interval);
-  // }, []);
+
   return (
     <Card
       title={title}

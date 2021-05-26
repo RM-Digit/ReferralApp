@@ -33,7 +33,7 @@ function register(app) {
     const filter = { id: ctx.request.body.id };
 
     let customerTags = {
-      id: ctx.request.body.admin_graphql_api_id,
+      id: ctx.request.body.customer.admin_graphql_api_id,
       tags: ["referedTo", "refer"],
     };
 

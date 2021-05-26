@@ -15,7 +15,7 @@ function register(app) {
     const data = ctx.request.body;
     console.log("landing site", data.landing_site_ref);
     if (!data.landing_site_ref) return (ctx.body = { success: false });
-    const customerId = ctx.request.body.admin_graphql_api_id;
+    const customerId = ctx.request.body.customer.admin_graphql_api_id;
     const filter = { id: ctx.request.body.id };
     let today = new Date();
     let end = new Date();
